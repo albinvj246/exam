@@ -1,0 +1,65 @@
+import java.util.*;
+import java.sql.*;
+public class op {
+    public static void main(String args[])
+    {
+        Scanner s =new Scanner(System.in);
+        int ch;
+        int i,x=1;
+        String ii,iii;
+        try
+        {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/sample","root","Albin##123");
+        Statement st=c.createStatement();
+        System.out.println("CHOOSE \n 1: insert 2: display 3: update 4:delete \n");
+        ch=s.nextInt();
+        do{
+        switch(ch){
+            case 1:
+                System.out.println("Enter id :");
+                i=s.nextInt();
+                System.out.println("Enter name :");
+                ii=s.next();
+                System.out.println("Enter department :");
+                iii=s.next();
+                String l="insert into employee values("+i+","+ii+","+iii+")";
+                st.execute(l);
+                break;
+            case 2:
+                String d="select * from employee";
+                ResultSet rs=st.executeQuery(d);
+                while(rs.next())
+                {
+                    System.out.println(rs.getInt(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3));
+                }
+                break;
+            case 3:
+                System.out.println("Enter id :");
+                i=s.nextInt();
+                String cc="update employee set edept='BCA' where id="+i+"";
+                st.executeUpdate(cc);
+                System.out.println("successfull");
+                break;
+            case 4:
+                System.out.println("Enter id :");
+                i=s.nextInt();
+                String ccc="delete from employee where id="+i+"";
+                st.executeUpdate(ccc);
+                System.out.println("successfull");
+                break;
+            default:
+                System.out.println("invalid choice");
+                break;
+        }
+        System.out.println("continue(1/0)");
+        x=s.nextInt();
+        }while(x==1);
+        }
+        catch(ClassNotFoundException | SQLException e){
+            
+        }
+        
+    }
+    
+}
