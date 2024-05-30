@@ -1,0 +1,62 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class coockie
+ */
+public class coockie extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            // Get cookies from the request
+            Cookie[] cookies = request.getCookies();
+            Cookie visitCookie = null;
+
+            // Check if the "visit" cookie exists
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("visit")) {
+                        visitCookie = cookie;
+                        break;
+                    }
+                }
+            }
+
+            // If the "visit" cookie doesn't exist, create it with value "1"
+            if (visitCookie == null) {
+                visitCookie = new Cookie("visit", "1");
+                response.addCookie(visitCookie);
+                out.println("This is the first time you visit.");
+            } else {
+                // Increment the visit count
+                int visitCount = Integer.parseInt(visitCookie.getValue());
+                visitCount++;
+                visitCookie.setValue(Integer.toString(visitCount));
+                response.addCookie(visitCookie);
+                out.println("You have visited " + visitCount + " times.");
+            }
+        }
+    }
+}
