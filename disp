@@ -1,0 +1,10 @@
+String password = request.getParameter("password");
+
+        if ("servlet".equals(password)) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("WelcomeServlet");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
+            dispatcher.forward(request, response);
+        }
+    }
